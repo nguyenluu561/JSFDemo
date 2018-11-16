@@ -1,0 +1,168 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html">
+<f:view>
+	<h:head>
+		<title><h:outputText value="#{cpt['label.page']}" /></title>
+		<link rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css"></link>
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/js/materialize.min.js"></script>
+		<script>
+			document.addEventListener('DOMContentLoaded', function() {
+				var elems = document.querySelectorAll('select');
+				var instances = M.FormSelect.init(elems, {});
+			});
+		</script>
+		<h:outputStylesheet library="css" name="style.css" />
+	</h:head>
+	<h:body>
+		<div class="container">
+			<h1 align="center">
+				<h:outputText value="#{cpt['label.form']}" />
+			</h1>
+			<div class="card">
+				<h:form id="EmpForm">
+
+
+					<div class="row">
+
+						<div class="col s4">
+							<div class="input-field">
+								<h:outputLabel value="#{cpt['label.name']}" />
+								<h:inputText class="autocomplete" id="Name"
+									value="#{bean.employee.name}" size="20" required="true" />
+								<h:message for="Name" style="color:red" />
+							</div>
+						</div>
+
+
+						<div class="col s4">
+							<div class="input-field">
+								<h:outputLabel value="#{cpt['label.email']}" for="email" />
+								<h:inputText class="autocomplete" id="email"
+									value="#{bean.employee.email}" size="20" required="true">
+									<f:validateRegex
+										pattern="^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,6})$" />
+								</h:inputText>
+								<h:message for="email" style="color:red" />
+							</div>
+						</div>
+
+						<div class="col s4">
+							<div class="input-field">
+								<h:outputLabel value="#{cpt['label.age']}" />
+								<h:inputText class="autocomplete" id="age"
+									value="#{bean.employee.age}" size="20" required="true" />
+							</div>
+						</div>
+
+					</div>
+
+
+
+					<div class="row">
+						<div class="col s6">
+							<h:outputLabel value="#{cpt['label.gender']}" />
+							<h:selectOneMenu value="#{bean.employee.gender}">
+								<f:selectItem itemValue="Male" itemLabel="Male" />
+								<f:selectItem itemValue="Female" itemLabel="Female" />
+								<f:selectItem itemValue="Undefined" itemLabel="Undefined" />
+							</h:selectOneMenu>
+						</div>
+
+						<div class="col s6">
+							<h:outputLabel value="#{cpt['label.department']}" />
+							<h:selectOneMenu id="department" value="#{bean.department.id}"
+								valueChangeListener="#{bean.changeDepartment}">
+								<f:selectItems value="#{bean.departmentList}" var="dept"
+									itemValue="#{dept.id}" itemLabel="#{dept.name}" />
+							</h:selectOneMenu>
+							<h:message for="deparment" style="color:red" />
+						</div>
+					</div>
+
+
+
+					<div class="row">
+						<div class="col s4">
+							<h:commandButton value="#{cpt['btn.add']}"
+								disabled="#{bean.isEmployeeExisting()}"
+								action="#{bean.addNewEmployee()}" />
+						</div>
+
+						<div class="col s4">
+							<h:commandButton value="#{cpt['btn.update']}"
+								action="#{bean.updateEmployee()}" />
+						</div>
+					</div>
+
+				</h:form>
+
+				<div class="card-content">
+					<h:form>
+						<h:dataTable id="empData" value="#{bean.employeeList}" var="emp"
+							class="responsive-table">
+							<h:column>
+								<f:facet name="header">
+									<h:commandLink action="#{bean.reverseEmployeeList()}"
+										value="#{cpt['table.empId']}"></h:commandLink>
+								</f:facet>
+				#{emp.id}
+			</h:column>
+							<h:column>
+								<f:facet name="header">
+									<h:outputLabel value="#{cpt['table.empName']}"></h:outputLabel>
+								</f:facet>
+				#{emp.name}
+			</h:column>
+							<h:column>
+								<f:facet name="header">
+									<h:outputLabel value="#{cpt['table.empEmail']}"></h:outputLabel>
+								</f:facet>
+				#{emp.email}
+			</h:column>
+							<h:column>
+								<f:facet name="header">
+									<h:outputLabel value="#{cpt['table.empGender']}"></h:outputLabel>
+
+								</f:facet>
+				#{emp.gender}
+			</h:column>
+							<h:column>
+								<f:facet name="header">
+									<h:outputLabel value="#{cpt['table.empAge']}"></h:outputLabel>
+
+								</f:facet>
+				#{emp.age}
+			</h:column>
+							<h:column>
+								<f:facet name="header">
+									<h:outputLabel value="#{cpt['table.empDepartment']}"></h:outputLabel>
+								</f:facet>
+				#{emp.department.name}
+			</h:column>
+							<h:column>
+								<f:facet name="header">
+									<h:outputLabel value="#{cpt['table.delete']}"></h:outputLabel>
+								</f:facet>
+								<h:commandLink value="#{cpt['table.delete']}"
+									action="#{bean.deleteEmployee(emp)}"
+									onclick="if(!confirm('Really delete?')) {return false;}" />
+							</h:column>
+							<h:column>
+								<f:facet name="header">
+									<h:outputLabel value="#{cpt['table.edit']}"></h:outputLabel>
+								</f:facet>
+								<h:commandLink value="Edit" action="#{bean.editEmployee(emp)}" />
+							</h:column>
+						</h:dataTable>
+
+					</h:form>
+				</div>
+			</div>
+		</div>
+	</h:body>
+</f:view>
+</html>

@@ -1,0 +1,18 @@
+.input-field label, label {
+	color: black;
+	font-weight: bold;
+}
+
+h1 {
+	color: black;
+}
+
+input[type=submit] {
+	background-color: #99ebed;
+	border: none;
+	color: black;
+	padding: 8px 16px;
+	text-decoration: none;
+	margin: 4px 2px;
+	cursor: pointer;
+}
